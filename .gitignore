@@ -1,0 +1,8 @@
+*~
+*#
+*.pyc
+web/site.cfg
+/IMG_*.JPG
+/*.xcf
+web/log.txt
+message.txt

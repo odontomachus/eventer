@@ -1,0 +1,8 @@
+[db]
+db=
+user=
+pass=
+
+[app]
+cookie_secret=
+debug=
