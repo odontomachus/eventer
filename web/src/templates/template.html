@@ -1,67 +1,43 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="Jonathan Villemaire-Krajden" content="" />
-    <title>Plan Nord</title>
-    <meta name="description" content="Préparation du surprise de Bruno">
+<html xmlns:ng="http://angularjs.org" ng-app>
+ <head>
+   <meta charset="utf-8" />
+   <meta name="Jonathan Villemaire-Krajden" content="" />
+   <title>Plan Nord</title>
+   <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+   <link rel="apple-touch-icon-precomposed" sizes="64x64" href="/static/favicon_64.png">
+   <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_32.png">
+   <!-- add styles -->
+   <link href="css/style.css" rel="stylesheet" type="text/css" />
 
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="64x64" href="/static/favicon_64.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_32.png">
-    <!-- add styles -->
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
 
-    <!-- add javascripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/controllers.js"></script>
-</head>
-<body ng-app>
+   <header>
+     <div class="header wrap">
+       <a href="/{{ user.hash }}"><h1>Plan Nord</h1></a>
+     </div>
+     End header {{ 2-1 }}
+   </header>
 
-  <header>
-    <div class="wrap">
-      <nav>
-        <ul>
-          <li><a id="wikiBtn" href="#!/" ng-class="{activeSmall:part == 'wiki'}" >Plan</a></li>
-          <li><a id="membersBtn" href="#!/privacy" ng-class="{activeSmall:part == 'members'}">Équipe</a></li>
-          <li><a id="forumBtn" href="#!/about" ng-class="{activeSmall:part == 'forum'}">Messages</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-<!-- main content -->
-<div id="main">
-  <div class="wiki">
-    <div style="width:100%" ng-view ng-animate="{enter: 'view-enter', leave: 'view-leave'}"></div>
-  </div>
-    <div class="">
-        <div class="head">Contact Us</div>
-        <img class="close" src="images/close.png" ng-click="closeForm()" />
-        <form ng-submit="save()" class="contactForm" name="form" ng-hide="loaded">
-            <input class="input" required="required" type="text" name="name" placeholder="your name" ng-model="message.name" />
-            <input class="input email" required="required" type="email" name="email" value="" placeholder="your email" ng-model="message.email" />
-
-            <textarea class="textarea" rows="5" required="required" placeholder="your message" ng-model="message.text" ></textarea>
-            <button class="btn green">send message</button>
-        </form>
-
-        <!-- contact us form response messages -->
-        <div ng-show="process" style="text-align:center">
-            <img class="loader" src="images/loader.png" />
-        </div>
-        <div ng-show="success"><p>Your message has been sent, thank you.</p></div>
-    </div>
-
-
-</div>
-
-</div>
-</body>
+   <!-- main content -->
+   <div id="main">
+     <div class="wiki">
+       <text-angular ng-model="wikiContent">
+       </text-angular>
+     </div>
+   </div>
+   <!-- add javascripts -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.js"></script>
+   <script src="/js/vendor/textAngular.js"></script>
+   <script src="/js/directives.js"></script>
+   <script src="/js/app.js"></script>
+   <script src="/js/controllers.js"></script>
+ </body>
 </html>
