@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:ng="http://angularjs.org" ng-app>
+<html xmlns:ng="http://angularjs.org" ng-app="club" ng-controller="home">
  <head>
    <meta charset="utf-8" />
    <meta name="Jonathan Villemaire-Krajden" content="" />
@@ -13,6 +13,16 @@
    <!-- add styles -->
    <link href="css/style.css" rel="stylesheet" type="text/css" />
 
+   <script type="text/javascript">
+     var bruno = {
+       home: "/{{ user.hash }}",
+       init: {
+         members : {% raw json_encode(users) %},
+         presence : {% raw json_encode(user.presence()) %},
+       },
+     };
+   </script>
+
  </head>
  <body>
 
@@ -20,22 +30,82 @@
      <div class="header wrap">
        <a href="/{{ user.hash }}"><h1>Plan Nord</h1></a>
      </div>
-     End header {{ 2-1 }}
    </header>
 
    <!-- main content -->
    <div id="main">
-     <div class="wiki">
-       <text-angular ng-model="wikiContent">
-       </text-angular>
+
+     <!-- Plans -->
+     <div class="section wiki">
+       <div class="sectionArea">
+         <h3>Plans:</h3>
+         <hr>
+         <div text-angular ng-model="html" text-angular-name="wikiContent" ></div>
+       </div>
+     </div>
+
+     <!-- Members -->
+     <div class="section members">
+       <div class="sectionArea">
+         <h3>Invités:</h3>
+         <hr>
+         <div id="presenceMenu" class="presenceMenu" ng-model="presence" ng-controller="PresenceController">
+           <b>Mes disponibilités</b>:<br>
+           <div class="menu">
+             <a ng-repeat="p in presence" ng-click="select(p)" title="{{! ['Impossible', 'Disponible', 'Peut-être'][p[1]] }}" class="day {{! ['no', 'yes', 'maybe'][p[1]] }}" ng-cloak>{{!p[0]}}</a>
+           </div>
+           <div ng-show="changed" ng-cloak>
+             <button ng-click="confirm()">Confirmer</button>
+           </div>
+         </div>
+         <div class="membersSchedule">
+           <b>La gang!</b>
+           <table id="members" ng-model="members" ng-controller="MembersController" ng-cloak>
+             <tbody>
+               <tr ng-repeat="member in members">
+                 <td>{{!member.name}}</td><td ng-repeat="presence in member.presence" class="day {{! ['no', 'yes', 'maybe'][presence[1]] }}">{{!presence[0]}}</td>
+               </tr>
+             </tbody>
+           </table>
+         </div>
+       </div>
+     </div>
+
+     <!-- Messages -->
+     <div class="section messages">
+       <div class="sectionArea">
+         <h3>Messages:</h3>
+         <hr>
+       </div>
      </div>
    </div>
+
+   <!-- Chat -->
+   <div id="chat" class="chat" ng-model="chat", ng-controller="ChatController">
+     <a ng-click="toggle()"><h3 title="Messagerie instantanée">Chat</h3></a>
+     <div class="chatArea" ng-cloak ng-show="chatVisible">
+       <div class="chatMessages">
+         <div ng-repeat="message in messages" class="message {{!message.userId}}">
+           <span title="Envoyé le {{!message.date}}" class="username">{{!message.nickname}}</span>&nbsp:&nbsp;<span class="text" ng-bind-html="message.text"></span>
+         </div>
+       </div>
+       <hr>
+       <div class="response">
+         <textarea ui-keypress="{13:'sendChat()'}" ng-maxlength="400" ng-model="chatMessage"></textarea>
+         <button ng-click="sendChat()">Envoyer</button>
+       </div>
+     </div>
+
+   </div>
+
+
    <!-- add javascripts -->
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
-   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.js"></script>
-   <script src="/js/vendor/textAngular.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
+   <script src="/js/vendor/textAngular.min.js"></script>
+   <script src="/js/vendor/ui-utils.min.js"></script>
    <script src="/js/directives.js"></script>
    <script src="/js/app.js"></script>
    <script src="/js/controllers.js"></script>

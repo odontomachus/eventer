@@ -1,0 +1,95 @@
+header {
+    width: 100%;
+}
+
+#main .section {
+    width: 50%;
+    position:relative;
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+#main .sectionArea {
+    padding: 10px;
+}
+
+#main .wiki {
+}
+
+#main .participants {
+}
+
+#main .messages {
+    float: right;
+}
+
+#main .membersSchedule {
+    margin-top: 1em;
+}
+
+#main .members table {
+    border-spacing: 0px;
+}
+
+#main .members td {
+    height: 1em;
+}
+
+#main .members .day {
+    margin:0px;
+    padding: 0px 3px;
+    width: 20px;
+    text-align: center;
+}
+
+#main .members .day.yes {
+    border: #b4ffb4 solid;
+    background-color: #cfc;
+}
+
+#main .members .day.no {
+    border: #ff9393 solid;
+    background-color: #faa;
+}
+
+#main .members .day.maybe {
+    border: #ccc solid;
+    background-color: #ddd;
+}
+
+#main .members a.day {
+    cursor: pointer;
+}
+
+
+.ta-editor{
+    min-height: 300px;
+    height: auto;
+    overflow: hidden;
+    font-family: inherit;
+    font-size: 100%;
+}
+
+.ng-cloak {
+    display: none !important;
+}
+
+#chat {
+    position: fixed;
+    bottom: 0px;
+    border-top: grey solid 1px;
+    border-right: grey solid 1px;
+    border-radius: 0 10px 0 0;
+    padding: 10px;
+}
+
+#chat .chatMessages {
+    max-height: 120px;
+    overflow-y: scroll;
+}
+
+#chat h3 {
+    margin-top: 0px;
+    padding-top: 0px;
+}

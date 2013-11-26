@@ -15,9 +15,12 @@ from sqlalchemy.orm import (
 
 cp = configparser.ConfigParser()
 cp.read('site.cfg');
-(db_name, db_user, db_pass) = map(lambda x: cp.get('db', x), ('db', 'user', 'pass'))
 
-engine = create_engine('mysql+mysqlconnector://{db_user}:{db_pass}@/{db_name}?unix_socket=/var/lib/mysql/mysql.sock'.format(db_user=db_user, db_pass=db_pass, db_name=db_name), echo=False)
+(db_name, db_user, db_pass) = map(lambda x: cp.get('db', x), ('db', 'user', 'pass'))
+conn_string = 'mysql+mysqlconnector://{db_user}:{db_pass}@/{db_name}?unix_socket=/var/lib/mysql/mysql.sock'
+
+engine = create_engine(conn_string.format(db_user=db_user, db_pass=db_pass, db_name=db_name),
+                       echo=False, pool_recycle=7200)
 
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
@@ -29,11 +32,17 @@ class User(Base):
     hash = Column(String(32), nullable=False, index=True, unique=True)
     name = Column(String(64), nullable=False)
     presence = Column(Integer) # 0-100
-    days = Column(Integer) # 1-4
+    V = Column(Integer)
+    S = Column(Integer)
+    D = Column(Integer)
+    L = Column(Integer)
     first_visit = Column(Boolean)
     viewed_comments = relationship("CommentViews")
     viewed_bodies = relationship("BodyViews")
     comments = relationship("Comment", backref="user")
+
+    def presence(self):
+        return [(d, getattr(self,d)) for d in "VSDL"]
 
 class Comment(Base):
     __tablename__ = 'comments'
