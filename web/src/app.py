@@ -10,6 +10,7 @@ import datetime
 locale.setlocale(locale.LC_ALL, "fr_CA.UTF-8")
 
 from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.exc import OperationalError, InvalidRequestError
 
 import tornado.escape
 import tornado.web
@@ -67,7 +68,13 @@ class BaseWebHandler(tornado.web.RequestHandler):
 class AuthHandler(DBHandler):
     def decode_argument(self, value, name=None):
         if name=='user':
-            user = self.db.query(models.User).filter_by(hash=value).first()
+            try:
+                user = self.db.query(models.User).filter_by(hash=value).first()
+            # Rather a hack, but this is the first database request on any query,
+            # so renew the connection if it has died.
+            except (OperationalError, InvalidRequestError) as e:
+                self.application.db = scoped_session(sessionmaker(bind=models.engine))
+                user = self.db.query(models.User).filter_by(hash=value).first()
             if not user:
                 raise HTTPError(403, 
                     "Veuillez utiliser le lien avec votre jeton d'authentification.")
