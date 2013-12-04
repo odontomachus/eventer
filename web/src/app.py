@@ -37,7 +37,11 @@ class Application(tornado.web.Application):
             'template_path':os.path.join(os.path.dirname(__file__), "templates"),
             'debug':cp.get('app', 'debug').strip().lower() == "true",
             'xsrf_cookies':True,
+            'eventer': {
+                'padId': cp.get('etherpad', 'padId'),
+            }
         }
+
         tornado.web.Application.__init__(self, handlers, **settings)
         self.listeners = []
         self.jobs = queue.Queue()
@@ -107,7 +111,7 @@ class HomeHandler(AuthHandler, BaseWebHandler):
         user_dict = list(map(user2dict, users))
         # order by answered, then name
         user_dict.sort(key=(lambda u: (not u['answer'], locale.strxfrm(u['name']))))
-        self.render("template.html", user=user, users=user_dict)
+        self.render("template.html", user=user, users=user_dict, settings=application.settings['eventer'])
 
 class UpdateHandler(AuthHandler, BaseWebHandler):
     @tornado.web.asynchronous
@@ -116,11 +120,11 @@ class UpdateHandler(AuthHandler, BaseWebHandler):
         if presence:
             try:
                 if not (len(presence)==4 and \
-                        functools.reduce(lambda x,y: x and (int(y) in (0,1,2)), [True] + presence)):
+                        functools.reduce(lambda x,y: x and (int(y) in (-1,0,1,2)), [True] + presence)):
                     raise HTTPError(400, "Invalid presence argument.")
             except Exception as e:
                 raise HTTPError(400, "Invalid presence format.")
-            (user.V, user.S, user.D, user.L) = map(int,presence)
+            (user.V, user.S, user.D, user.L) = map(lambda x: x if x>=0 else None, map(int, presence))
         self.db.add(user)
         self.db.commit()
         message = json.dumps({"UpdateUser": user2dict(user)})

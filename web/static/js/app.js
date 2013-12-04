@@ -1,4 +1,4 @@
-var app = angular.module("club", ["textAngular", "ui.keypress"]);
+var app = angular.module("club", ["ui.keypress", "ngSanitize"]);
 
 function getCookie(name) {
     var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
@@ -22,3 +22,10 @@ jQuery.postJSON = function(url, args, callback, error) {
 
 eventer.days = {'V': 0, 'S':1, 'D':2, 'L':3};
 eventer.callbacks = {};
+
+// var padId = $('#wikipad').attr('padId');
+// $('#wikipad').pad({'padId':padId,
+//                    'showChat':'false',
+//                    'host':window.location.protocol + "//" + window.location.hostname+":9001",
+//                    'userName': eventer.name,
+//                    });

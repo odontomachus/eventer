@@ -1,6 +1,6 @@
 var app = angular.module('club')
     .controller('home', [function () {
-        var ws = new WebSocket("ws://"+window.location.hostname+":8119"+eventer.home+"/updates");
+        var ws = new WebSocket("ws://"+window.location.hostname+eventer.home+"/updates");
         ws.onmessage = function(evt) {
 	    var data = $.parseJSON(evt.data);
 	    for(var dataKey in data) {
@@ -23,7 +23,6 @@ function MembersController($scope) {
                 var member = $scope.members[key];
                 if (member.name == obj.name) {
                     $scope.members[key] = obj;
-                    console.log(obj);
                     break;
                 };
             };
@@ -46,7 +45,7 @@ function PresenceController($scope) {
     $scope.confirm = function() {
         $scope.changed = false;
         var data = {
-            presence: $scope.presence.map(function(m) {return m[1]}),
+            presence: $scope.presence.map(function(m) {return m[1]||-1}),
         }
         jQuery.postJSON(eventer.home+"/update", data);
     }
@@ -70,7 +69,7 @@ function ChatController($scope) {
         $scope.$apply(function() {
             $scope.messages.push(message);
             var el = $("#chat .chatMessages");
-            el.scrollTop = el.scrollHeight;
+            el.animate({scrollTop: el.height()}, 'slow');;
         });
     };
 };

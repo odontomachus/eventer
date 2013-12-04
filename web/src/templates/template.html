@@ -14,8 +14,9 @@
    <link href="css/style.css" rel="stylesheet" type="text/css" />
 
    <script type="text/javascript">
-     var bruno = {
+     var eventer = {
        home: "/{{ user.hash }}",
+       name: "{{ user.name }}",
        init: {
          members : {% raw json_encode(users) %},
          presence : {% raw json_encode(user.presence()) %},
@@ -40,7 +41,7 @@
        <div class="sectionArea">
          <h3>Plans:</h3>
          <hr>
-         <div text-angular ng-model="html" text-angular-name="wikiContent" ></div>
+         <div id="wikipad" padId="{{ settings['padId'] }}" ></div>
        </div>
      </div>
 
@@ -104,10 +105,10 @@
    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
-   <script src="/js/vendor/textAngular.min.js"></script>
    <script src="/js/vendor/ui-utils.min.js"></script>
-   <script src="/js/directives.js"></script>
+   <script src="/js/vendor/etherpad.js"></script>
    <script src="/js/app.js"></script>
+   <script src="/js/directives.js"></script>
    <script src="/js/controllers.js"></script>
  </body>
 </html>
