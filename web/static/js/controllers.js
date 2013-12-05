@@ -45,6 +45,7 @@ function PresenceController($scope) {
     $scope.confirm = function() {
         $scope.changed = false;
         var data = {
+            callback: "presence",
             presence: $scope.presence.map(function(m) {
                 if (typeof m[1] == "number") {
                         return m[1];

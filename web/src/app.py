@@ -52,9 +52,11 @@ class Application(tornado.web.Application):
         self.jobs = queue.Queue()
         # Have one global connection.
         self.db = scoped_session(sessionmaker(bind=models.engine))
+        self.publishers = []
         for i in range(4):
             t = Publisher(self.jobs)
-        t.start()
+            self.publishers.append(t)
+            t.start()
 
 
 

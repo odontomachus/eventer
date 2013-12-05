@@ -24,6 +24,22 @@ class HomeHandler(AuthHandler, BaseWebHandler):
 class UpdateHandler(AuthHandler, BaseWebHandler):
     @tornado.web.asynchronous
     def post(self, user):
+        callback = self.get_argument("callback", None)
+        if (not callback):
+            raise HTTPError(400, "No callback")
+        try:
+            callback = getattr(self, ("callback_" + callback.decode('utf-8')))
+            message = callback(user)
+
+        except Exception as e:
+            raise HTTPError(400, "Invalid callback")
+        self.write("ok");
+        self.finish()
+        if message:
+            for listener in application.listeners:
+                application.jobs.put((listener, message))
+
+    def callback_presence(self, user):
         presence = self.request.arguments.get("presence[]", None)
         if presence:
             try:
@@ -35,11 +51,10 @@ class UpdateHandler(AuthHandler, BaseWebHandler):
             (user.V, user.S, user.D, user.L) = map(lambda x: x if x>=0 else None, map(int, presence))
         self.db.add(user)
         self.db.commit()
-        message = json.dumps({"UpdateUser": user.to_dict()})
-        self.write("ok");
-        self.finish()
-        for listener in application.listeners:
-            application.jobs.put((listener, message))
+        return json.dumps({"UpdateUser": user.to_dict()})
+
+
+
 
 class UpdatesHandler(AuthHandler, tornado.websocket.WebSocketHandler):
     def open(self, user):
