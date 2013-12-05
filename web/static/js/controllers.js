@@ -45,8 +45,15 @@ function PresenceController($scope) {
     $scope.confirm = function() {
         $scope.changed = false;
         var data = {
-            presence: $scope.presence.map(function(m) {return m[1]||-1}),
-        }
+            presence: $scope.presence.map(function(m) {
+                if (typeof m[1] == "number") {
+                        return m[1];
+                }
+                else {
+                    return -1;
+                }
+            })
+        };
         jQuery.postJSON(eventer.home+"/update", data);
     }
 };
