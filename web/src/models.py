@@ -25,7 +25,12 @@ engine = create_engine(conn_string.format(db_user=db_user, db_pass=db_pass, db_n
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
-class User(Base):
+class BaseMixin:
+    def to_dict(self):
+        return dict((self, getattr(self, col)) for col in self.__table__.columns.keys())
+
+
+class User(BaseMixin, Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     email = Column(String(75), nullable=False)
@@ -44,7 +49,20 @@ class User(Base):
     def presence(self):
         return [(d, getattr(self,d)) for d in "VSDL"]
 
-class Comment(Base):
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'presence' : (
+                ('V', self.V),
+                ('S', self.S),
+                ('D', self.D),
+                ('L', self.L),
+            ),
+            'answer': not (self.S is None and self.V is None and self.D is None and self.L is None)
+        }
+
+
+class Comment(BaseMixin, Base):
     __tablename__ = 'comments'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
@@ -55,7 +73,7 @@ class Comment(Base):
     last_response = Column(DateTime, index=True)
     original = Column(Integer, ForeignKey('comments.id'), index=True)
 
-class Body(Base):
+class Body(BaseMixin, Base):
     __tablename__ = 'bodies'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
@@ -63,15 +81,18 @@ class Body(Base):
     body = Column(Text)
 
 
-class BodyViews(Base):
+class BodyViews(BaseMixin, Base):
     __tablename__ = 'body_views'
     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
     body_id = Column(Integer, ForeignKey('bodies.id'), primary_key=True)
 
-class CommentViews(Base):
+class CommentViews(BaseMixin, Base):
     __tablename__ = 'comment_views'
     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
     comment_id = Column(Integer, ForeignKey('comments.id'), primary_key=True)
+
+def to_dict(model):
+    return model.to_dict()
 
 def create_all():
     Base.metadata.create_all(engine)
