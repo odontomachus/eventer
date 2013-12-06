@@ -20,6 +20,7 @@
        init: {
          members : {% raw json_encode(users) %},
          presence : {% raw json_encode(user.presence()) %},
+         messages : {% raw json_encode(messages) %},
        },
      };
    </script>
@@ -73,10 +74,14 @@
      </div>
 
      <!-- Messages -->
-     <div class="section messages">
-       <div class="sectionArea">
+     <div id="messages" class="section messages">
+       <div class="sectionArea" ng-model="messages" ng-controller="MessageController" ng-cloak>
          <h3>Messages:</h3>
          <hr>
+         <div class="thread-list">
+           <div class="thread" ng-repeat="thread in threads">
+             <div class="title">{{! thread.title|truncate:{length:100} }}</div>
+           </div>
        </div>
      </div>
    </div>
@@ -110,5 +115,6 @@
    <script src="/js/app.js"></script>
    <script src="/js/directives.js"></script>
    <script src="/js/controllers.js"></script>
+   <script src="/js/filters.js"></script>
  </body>
 </html>

@@ -72,6 +72,7 @@ class Comment(BaseMixin, Base):
     updated = Column(DateTime)
     last_response = Column(DateTime, index=True)
     original = Column(Integer, ForeignKey('comments.id'), index=True)
+    replies = relationship("Comment")
 
 class Body(BaseMixin, Base):
     __tablename__ = 'bodies'

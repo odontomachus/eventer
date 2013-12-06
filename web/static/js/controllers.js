@@ -108,3 +108,6 @@ function ChatController($scope) {
         });
     };
 };
+
+function MessageController($scope) {
+}

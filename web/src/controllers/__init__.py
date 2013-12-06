@@ -11,15 +11,30 @@ from .base import (
     AuthHandler, 
     BaseWebHandler,
 )
-import models
+from models import (
+    User,
+    Comment,
+    to_dict
+)
 
 class HomeHandler(AuthHandler, BaseWebHandler):
     def get(self, user):
-        users = self.db.query(models.User).all()
-        user_dict = list(map(models.to_dict, users))
+        users = self.db.query(User).all()
+        user_dict = list(map(to_dict, users))
+        messages = self.db.query(Comment)\
+                          .order_by(Comment.last_response.desc())\
+                          .limit(11).all()
+        # For pagination
+        more_messages = (len(messages) == 11)
+        # We only need 10
+        if more_messages:
+            messages.pop()
         # order by answered, then name
         user_dict.sort(key=(lambda u: (not u['answer'], locale.strxfrm(u['name']))))
-        self.render("template.html", user=user, users=user_dict, settings=application.settings['eventer'])
+        self.render("template.html", user=user, users=user_dict, 
+                    messages=list(map(to_dict,messages)),
+                    more_messages=more_messages,
+                    settings=application.settings['eventer'])
 
 class UpdateHandler(AuthHandler, BaseWebHandler):
     @tornado.web.asynchronous
