@@ -79,9 +79,32 @@
          <h3>Messages:</h3>
          <hr>
          <div class="thread-list">
-           <div class="thread" ng-repeat="thread in threads">
-             <div class="title">{{! thread.title|truncate:{length:100} }}</div>
+           <div class="thread-listing" ng-repeat="thread in threads" id="thread-{{!thread.threadId}}">
+             <div class="header">
+               <span class="title" title="{{!thread.title}}">{{! thread.title|truncate:{length:100} }}</span>
+               <span class="user">{{!thread.user.name}}</span>
+               <span class="num-replies">{{!thread.replies.length}}</span>
+               <span class="date-created">{{!thread.created}}</span>
+               <span class="date-updated">{{!thread.last_response}}</span>
+             </div>
+             <div class="thread-overlay" ng-show="thread.expanded">
+               <div class="thread-content">
+                 <div class="header">
+                   <div class="title">{{!thread.title}}</div>
+                   <div class="user">{{!thread.user.name}}</div>
+                 </div>
+                 <div class="body">{{!thread.comment}}</div>
+               </div>
+             </div>
            </div>
+         </div>
+       </div>
+       <div class="new-thread" ng-controller="NewMessageController">
+         <label>sujet</label>
+         <input ngMaxlength="140" ng-model="comment.title" ng-required="true" /><br >
+         <label>Message</label>
+         <textarea ng-model="comment.comment" ng-required="true"></textarea>
+         <button ng-click="sendMessage()">Envoyer</button>
        </div>
      </div>
    </div>
@@ -97,7 +120,7 @@
        </div>
        <hr>
        <div class="response">
-         <textarea ui-keypress="{13:'sendChat()'}" ng-maxlength="400" ng-model="chatMessage"></textarea>
+         <textarea ui-keypress="{13:'sendChat($event)'}" ng-maxlength="400" ng-model="chatMessage"></textarea>
          <button ng-click="sendChat()">Envoyer</button>
        </div>
      </div>

@@ -42,7 +42,7 @@ var app = angular.module('club').
                 })
             };
             jQuery.postJSON(eventer.home+"/update", data);
-        }
+        };
     }]).
     controller('ChatController', ['$scope', 'callbacks', function ($scope, callbacks) {
         $scope.messages = [];
@@ -50,7 +50,10 @@ var app = angular.module('club').
         $scope.toggle = function () {
             $scope.chatVisible ^= true;
         };
-        $scope.sendChat = function() {
+        $scope.sendChat = function($event) {
+            if ($event) {
+                $event.preventDefault();
+            }
             // Don't send empty message
             if ($scope.chatMessage) {
                 jQuery.postJSON(eventer.home+"/chat", {'message':$scope.chatMessage});
@@ -66,4 +69,31 @@ var app = angular.module('club').
         };
     }]).
     controller('MessageController', ['$scope', 'callbacks', function($scope, callbacks) {
+        callbacks.MessageThread = function(thread) {
+            $scope.$apply(function() {
+                $scope.threads.push(thread);
+            });
+        };
+        callbacks.MessageReply = function(threadUpdate) {
+            $scope.$apply(function() {
+                for (var index in $scope.threads) {
+                    var thread = $scope.threads[index];
+                    if (threadUpdate.threadId == thread.threadId) {
+                        thread.push(threadUpdate.comment);
+                        thread.updated = true;
+                        break;
+                    };
+                };
+            });
+        };
+    }]).
+    controller('NewMessageController', ['$scope', function($scope) {
+        var getEmptyMessage = function () {
+            return {title: '', comment: ''};
+        }
+        $scope.comment = getEmptyMessage();
+        $scope.sendMessage = function() {
+            jQuery.postJSON(eventer.home+"/message/new", {'message':$scope.comment});
+            $scope.comment = getEmptyMessage();
+        };
     }]);
