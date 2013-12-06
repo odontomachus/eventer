@@ -20,8 +20,7 @@ jQuery.postJSON = function(url, args, callback, error) {
     }});
 };
 
-eventer.days = {'V': 0, 'S':1, 'D':2, 'L':3};
-eventer.callbacks = {};
+app.days = {'V': 0, 'S':1, 'D':2, 'L':3};
 
 // var padId = $('#wikipad').attr('padId');
 // $('#wikipad').pad({'padId':padId,
