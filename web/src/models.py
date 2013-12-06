@@ -11,6 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import (
     relationship,
+    validates,
 )
 
 cp = configparser.ConfigParser()
@@ -27,7 +28,7 @@ Base = declarative_base()
 
 class BaseMixin:
     def to_dict(self):
-        return dict((self, getattr(self, col)) for col in self.__table__.columns.keys())
+        return dict([(col, getattr(self, col)) for col in self.__table__.columns.keys()])
 
 
 class User(BaseMixin, Base):
@@ -73,6 +74,20 @@ class Comment(BaseMixin, Base):
     last_response = Column(DateTime, index=True)
     original = Column(Integer, ForeignKey('comments.id'), index=True)
     replies = relationship("Comment")
+
+    @validates("title")
+    def validate_title(self, key, title):
+        assert len(title)<=140
+        return title
+
+    def to_dict(self):
+        base = BaseMixin.to_dict(self)
+        for date in ('created', 'updated', 'last_response'):
+            if base[date]:
+                base[date] = base[date].strftime('%c')
+        base['user'] = {'name': self.user.name}
+        return base
+
 
 class Body(BaseMixin, Base):
     __tablename__ = 'bodies'

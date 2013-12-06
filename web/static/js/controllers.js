@@ -31,7 +31,6 @@ var app = angular.module('club').
         $scope.confirm = function() {
             $scope.changed = false;
             var data = {
-                callback: "presence",
                 presence: $scope.presence.map(function(m) {
                     if (typeof m[1] == "number") {
                         return m[1];
@@ -41,7 +40,7 @@ var app = angular.module('club').
                     }
                 })
             };
-            jQuery.postJSON(eventer.home+"/update", data);
+            jQuery.postJSON(eventer.home+"/user/presence", data);
         };
     }]).
     controller('ChatController', ['$scope', 'callbacks', function ($scope, callbacks) {
@@ -69,6 +68,8 @@ var app = angular.module('club').
         };
     }]).
     controller('MessageController', ['$scope', 'callbacks', function($scope, callbacks) {
+        $scope.threads = eventer.init.messages;
+
         callbacks.MessageThread = function(thread) {
             $scope.$apply(function() {
                 $scope.threads.push(thread);
@@ -93,7 +94,7 @@ var app = angular.module('club').
         }
         $scope.comment = getEmptyMessage();
         $scope.sendMessage = function() {
-            jQuery.postJSON(eventer.home+"/message/new", {'message':$scope.comment});
+            jQuery.postJSON(eventer.home+"/message/new", $scope.comment);
             $scope.comment = getEmptyMessage();
         };
     }]);

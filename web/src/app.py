@@ -17,7 +17,8 @@ import models
 import controllers
 from controllers import (
     ChatHandler,
-    UpdateHandler,
+    UserHandler,
+    MessageHandler,
     UpdatesHandler,
     HomeHandler,
 )
@@ -42,7 +43,8 @@ class Application(tornado.web.Application):
 
         handlers = [
             (r"/(?P<user>[a-zA-Z0-9]{32})", HomeHandler),
-            (r"/(?P<user>[a-zA-Z0-9]{32})/update", UpdateHandler),
+            (r"/(?P<user>[a-zA-Z0-9]{32})/user/(?P<action>presence)", UserHandler),
+            (r"/(?P<user>[a-zA-Z0-9]{32})/message/(?P<action>new|reply)", MessageHandler),
             (r"/(?P<user>[a-zA-Z0-9]{32})/updates", UpdatesHandler),
             (r"/(?P<user>[a-zA-Z0-9]{32})/chat", ChatHandler),
         ]
