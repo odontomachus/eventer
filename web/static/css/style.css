@@ -95,7 +95,24 @@ header {
 }
 
 .display-panel {
-    position: absolute;
-    background-color: rgba(250,250,255,0.9);
 }
 
+.display-panel > div {
+    position: absolute;
+    background-color: rgba(255,255,255, .9);
+    z-index: 40;
+    border: 1px solid blue;
+    border-radius: 3px;
+}
+
+.display-panel > div > div.content {
+    padding: 10px;
+}
+
+.btn-close {
+    cursor: pointer;
+    background-color: #bbd;
+    border: 1px solid #446;
+    border-radius: 3px;
+    paddix: 1px;
+}

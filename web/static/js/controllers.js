@@ -1,12 +1,18 @@
 var app = angular.module('club').
     controller('HomeController', ['$scope', function($scope) {
     }]).
-    controller('DisplayController', ['$scope', '$rootScope', '$sce', function($scope, $rootScope, $sce) {
+    controller('DisplayController', ['$scope', '$rootScope', '$compile', function($scope, $rootScope, $compile) {
         $scope.remove = function () {
             $scope.visible = false;
             $("#display-panel").html("");
         }
-        $rootScope.$on("displayContent", function (event) {
+        $rootScope.$on("displayContent", function (event, content) {
+            var menu = $compile("<div display-menu></div>")($scope);
+            content.prepend(menu);
+            content.resizable({handles: "all"});
+            content.draggable({distance: 5, containment: "document", handle: ".drag-handle"});
+            $("#display-panel").html("");
+            $("#display-panel").append(content);
             $scope.visible=true;
         });
     }]).
@@ -82,9 +88,17 @@ var app = angular.module('club').
         $scope.display = function (thread) {
             var scope = $rootScope.$new(true);
             scope.thread = thread;
-            var content = $compile("<display-thread></display-thread>")(scope);
-            $("#display-panel").append(content);
-            $rootScope.$emit("displayContent");
+            var content = $compile("<div display-thread></div>")(scope);
+
+            // Arrange position
+            var targetOffset = $("#thread-list").offset();
+            var rootOffset = $("#main").offset();
+            var x = targetOffset.left-rootOffset.left;
+            var y = targetOffset.top-rootOffset.top;
+
+            $rootScope.$emit("displayContent", content);
+            content.offset({left: x, top: y});
+            content.width($("#thread-list").width()-22);
         }
 
         callbacks.MessageThread = function(thread) {

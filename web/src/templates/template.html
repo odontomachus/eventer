@@ -12,7 +12,7 @@
    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_32.png">
    <!-- add styles -->
    <link href="css/style.css" rel="stylesheet" type="text/css" />
-
+   <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
    <script type="text/javascript">
      var eventer = {
        home: "/{{ user.hash }}",
@@ -82,7 +82,7 @@
        <div class="sectionArea" ng-model="messages" ng-controller="MessageController" ng-cloak>
          <h3>Messages:</h3>
          <hr>
-         <div class="thread-list">
+         <div id="thread-list" class="thread-list">
            <div class="thread-listing" ng-repeat="thread in threads" id="thread-{{!thread.threadId}}">
              <div class="header expand-action" ng-click="display(thread)">
                <span class="title" title="{{!thread.title}}">{{! thread.title|truncate:{length:100} }}</span>
