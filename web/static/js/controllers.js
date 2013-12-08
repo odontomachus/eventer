@@ -1,6 +1,15 @@
 var app = angular.module('club').
     controller('HomeController', ['$scope', function($scope) {
     }]).
+    controller('DisplayController', ['$scope', '$rootScope', '$sce', function($scope, $rootScope, $sce) {
+        $scope.remove = function () {
+            $scope.visible = false;
+            $("#display-panel").html("");
+        }
+        $rootScope.$on("displayContent", function (event) {
+            $scope.visible=true;
+        });
+    }]).
     controller('MembersController', ['$scope', 'callbacks', function ($scope, callbacks) {
         $scope.members = eventer.init.members;
 
@@ -67,8 +76,16 @@ var app = angular.module('club').
             });
         };
     }]).
-    controller('MessageController', ['$scope', 'callbacks', function($scope, callbacks) {
+    controller('MessageController', ['$scope', '$rootScope', '$compile', 'callbacks', function($scope, $rootScope, $compile, callbacks) {
         $scope.threads = eventer.init.messages;
+
+        $scope.display = function (thread) {
+            var scope = $rootScope.$new(true);
+            scope.thread = thread;
+            var content = $compile("<display-thread></display-thread>")(scope);
+            $("#display-panel").append(content);
+            $rootScope.$emit("displayContent");
+        }
 
         callbacks.MessageThread = function(thread) {
             $scope.$apply(function() {

@@ -37,6 +37,10 @@
    <!-- main content -->
    <div id="main">
 
+     <!-- Display panel -->
+     <div id="display-panel" class="display-panel" ng-controller="DisplayController" ng-show="visible">
+     </div>
+
      <!-- Plans -->
      <div class="section wiki">
        <div class="sectionArea">
@@ -80,21 +84,12 @@
          <hr>
          <div class="thread-list">
            <div class="thread-listing" ng-repeat="thread in threads" id="thread-{{!thread.threadId}}">
-             <div class="header">
+             <div class="header expand-action" ng-click="display(thread)">
                <span class="title" title="{{!thread.title}}">{{! thread.title|truncate:{length:100} }}</span>
                <span class="user">{{!thread.user.name}}</span>
                <span class="num-replies">{{!thread.replies.length}}</span>
                <span class="date-created">{{!thread.created}}</span>
                <span class="date-updated">{{!thread.last_response}}</span>
-             </div>
-             <div class="thread-overlay" ng-show="thread.expanded">
-               <div class="thread-content">
-                 <div class="header">
-                   <div class="title">{{!thread.title}}</div>
-                   <div class="user">{{!thread.user.name}}</div>
-                 </div>
-                 <div class="body">{{!thread.comment}}</div>
-               </div>
              </div>
            </div>
          </div>
