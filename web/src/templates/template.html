@@ -109,8 +109,10 @@
      <a ng-click="toggle()"><h3 title="Messagerie instantanée">Chat</h3></a>
      <div class="chatArea" ng-cloak ng-show="chatVisible">
        <div class="chatMessages">
-         <div ng-repeat="message in messages" class="message {{!message.userId}}">
-           <span title="Envoyé le {{!message.date}}" class="username">{{!message.nickname}}</span>&nbsp:&nbsp;<span class="text" ng-bind-html="message.text"></span>
+         <div class="chatWindow">
+           <div ng-repeat="message in messages" class="message {{!message.userId}}">
+             <span title="Envoyé le {{!message.date}}" class="username">{{!message.nickname}}</span>&nbsp:&nbsp;<span class="text" ng-bind-html="message.text"></span>
+           </div>
          </div>
        </div>
        <hr>
@@ -125,7 +127,7 @@
 
    <!-- add javascripts -->
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
    <script src="/js/vendor/ui-utils.min.js"></script>

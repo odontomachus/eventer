@@ -78,7 +78,8 @@ var app = angular.module('club').
             $scope.$apply(function() {
                 $scope.messages.push(message);
                 var el = $("#chat .chatMessages");
-                el.animate({scrollTop: el.height()}, 'slow');;
+                var elWindow = $("#chat .chatWindow");
+                el.animate({scrollTop: elWindow.height()}, 'slow');;
             });
         };
     }]).

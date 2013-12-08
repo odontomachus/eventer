@@ -85,7 +85,7 @@ header {
 }
 
 #chat .chatMessages {
-    max-height: 120px;
+    max-height: 140px;
     overflow-y: scroll;
 }
 
@@ -109,10 +109,24 @@ header {
     padding: 10px;
 }
 
+.display-menu {
+    float:left;
+    width: 100%;
+    position:relative;
+}
+
+.drag-handle {
+    position:relative;
+    float: left;
+    width: 100%;
+}
+
 .btn-close {
+    position:relative;
     cursor: pointer;
     background-color: #bbd;
     border: 1px solid #446;
     border-radius: 3px;
-    paddix: 1px;
+    padding: 1px 5px;
+    float: right;
 }
