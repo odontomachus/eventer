@@ -76,6 +76,7 @@ class UserHandler(ActionHandler):
 
 class MessageHandler(ActionHandler):
     def callback_new(self, user):
+        """ Record a new comment. """
         try:
             comment = self.get_argument("comment")
             title = self.get_argument("title")
@@ -84,6 +85,24 @@ class MessageHandler(ActionHandler):
                               created=now, updated=now, last_response=now)
             self.db.add(comment)
             self.db.commit()
+        except Exception as e:
+            print(e)
+            pass
+
+    def callback_reply(self, user):
+        """ Record a reply. """
+        try:
+            original_id = self.get_argument("thread_id")
+            comment = self.get_argument("reply")
+            now = datetime.datetime.now()
+            original = self.db.query(Comment).filter_by(id=original_id).first()
+            comment = Comment(user=user, comment=comment,
+                              created=now, updated=now, last_response=now, original=original_id)
+            original.replies.append(comment)
+            original.last_response = now
+            self.db.add(original)
+            self.db.commit()
+
         except Exception as e:
             print(e)
             pass

@@ -89,6 +89,15 @@ var app = angular.module('club').
         $scope.display = function (thread) {
             var scope = $rootScope.$new(true);
             scope.thread = thread;
+
+            scope.sendReply = function() {
+                var data = { thread_id: thread.id, reply: thread.reply };
+                jQuery.postJSON(eventer.home+"/message/reply", data);
+                thread.reply="";
+            }
+
+            
+
             var content = $compile("<div display-thread></div>")(scope);
 
             // Arrange position

@@ -11,6 +11,13 @@ angular.module("club").
                 '</div>' +
                 '<div class="body">{{thread.comment}}</div>' +
                 '</div>' +
+                '<div class="reply">'+
+                '<a class="action" ng-click="thread.showReply=true">Répondre</a>' +
+                '<div ng-show="thread.showReply">' +
+                '<textarea ng-model="thread.reply">{{thread.reply}}</textarea>' +
+                '<button ng-click="sendReply()">Envoyer</button>' +
+                '</div>' +
+                '</div>' +
                 '</div>',
         };
     }).
