@@ -28,6 +28,7 @@ class HomeHandler(AuthHandler, BaseWebHandler):
 
         # Get messages
         messages = self.db.query(Comment)\
+                          .filter_by(original=None)\
                           .order_by(Comment.last_response.desc())\
                           .limit(11).all()
         # For pagination
@@ -45,21 +46,29 @@ class HomeHandler(AuthHandler, BaseWebHandler):
 
 class ActionHandler(AuthHandler, BaseWebHandler):
     @tornado.web.asynchronous
-    def post(self, user, action):
+    def post(self, user, action, *args, **kwargs):
+        self.call(user, "post", action, *args, **kwargs)
+
+    @tornado.web.asynchronous
+    def get(self, user, action, *args, **kwargs):
+        self.call(user, "get", action, *args, **kwargs)
+
+    def call(self, user, method, action, *args, **kwargs):
         try:
-            callback = getattr(self, ("callback_" + action.decode('utf-8')))
-            message = callback(user)
+            callback = getattr(self, ("_".join(["",method,action.decode("utf-8")])))
+            message = callback(user, *args, **kwargs)
 
         except Exception as e:
-            raise HTTPError(400, "Invalid callback")
-        self.write("ok");
+            print(e)
+            raise HTTPError(404)
         self.finish()
         if message:
             for listener in application.listeners:
                 application.jobs.put((listener, message))
 
+
 class UserHandler(ActionHandler):
-    def callback_presence(self, user):
+    def _post_presence(self, user, *args):
         presence = self.request.arguments.get("presence[]", None)
         if presence:
             try:
@@ -75,7 +84,7 @@ class UserHandler(ActionHandler):
 
 
 class MessageHandler(ActionHandler):
-    def callback_new(self, user):
+    def _post_new(self, user, *args):
         """ Record a new comment. """
         try:
             comment = self.get_argument("comment")
@@ -89,7 +98,7 @@ class MessageHandler(ActionHandler):
             print(e)
             pass
 
-    def callback_reply(self, user):
+    def _post_reply(self, user, *args):
         """ Record a reply. """
         try:
             original_id = self.get_argument("thread_id")
@@ -106,6 +115,12 @@ class MessageHandler(ActionHandler):
         except Exception as e:
             print(e)
             pass
+
+    def _get_view(self, user, thread_id, *args):
+        """ Send a json reply with the whole message thread. """
+        thread = self.db.query(Comment).filter_by(id=thread_id).first()
+        thread_dict = thread.to_dict(True)
+        self.write(thread_dict)
 
 class UpdatesHandler(AuthHandler, tornado.websocket.WebSocketHandler):
     def open(self, user):

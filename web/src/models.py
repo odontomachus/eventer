@@ -73,19 +73,21 @@ class Comment(BaseMixin, Base):
     updated = Column(DateTime)
     last_response = Column(DateTime, index=True)
     original = Column(Integer, ForeignKey('comments.id'), index=True)
-    replies = relationship("Comment")
+    replies = relationship("Comment", order_by="Comment.id")
 
     @validates("title")
     def validate_title(self, key, title):
         assert len(title)<=140
         return title
 
-    def to_dict(self):
+    def to_dict(self, replies=False):
         base = BaseMixin.to_dict(self)
         for date in ('created', 'updated', 'last_response'):
             if base[date]:
                 base[date] = base[date].strftime('%c')
         base['user'] = {'name': self.user.name}
+        if replies:
+            base['replies'] = list(map(to_dict, self.replies))
         return base
 
 
