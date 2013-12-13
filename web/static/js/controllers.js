@@ -83,34 +83,37 @@ var app = angular.module('club').
             });
         };
     }]).
-    controller('MessageController', ['$scope', '$rootScope', '$compile', 'callbacks', function($scope, $rootScope, $compile, callbacks) {
+    controller('MessageController', ['$scope', '$rootScope', '$http', '$compile', 'callbacks', function($scope, $rootScope, $http, $compile, callbacks) {
         $scope.threads = eventer.init.messages;
 
         $scope.display = function (thread) {
-            var scope = $rootScope.$new(true);
-            scope.thread = thread;
 
-            scope.sendReply = function() {
-                var data = { thread_id: thread.id, reply: thread.reply };
-                jQuery.postJSON(eventer.home+"/message/reply", data);
-                thread.reply="";
-            }
+            $http({method: 'GET', url: eventer.home + "/message/view/" + thread.id}).
+                success(function(data, status, headers, config) {
+                    var scope = $rootScope.$new(true);
+                    scope.thread = data;
 
-            
+                    scope.sendReply = function() {
+                        var data = { thread_id: thread.id, reply: scope.thread.reply };
+                        jQuery.postJSON(eventer.home+"/message/reply", data);
+                        scope.thread.reply="";
+                    }
 
-            var content = $compile("<div display-thread></div>")(scope);
+                    
 
-            // Arrange position
-            var targetOffset = $("#thread-list").offset();
-            var rootOffset = $("#main").offset();
-            var x = targetOffset.left-rootOffset.left;
-            var y = targetOffset.top-rootOffset.top;
+                    var content = $compile("<div display-thread></div>")(scope);
 
-            $rootScope.$emit("displayContent", content);
-            content.offset({left: x, top: y});
-            content.width($("#thread-list").width()-22);
-        }
+                    // Arrange position
+                    var targetOffset = $("#thread-list").offset();
+                    var rootOffset = $("#main").offset();
+                    var x = targetOffset.left-rootOffset.left;
+                    var y = targetOffset.top-rootOffset.top;
 
+                    $rootScope.$emit("displayContent", content);
+                    content.offset({left: x, top: y});
+                    content.width($("#thread-list").width()-22);
+                });
+        };
         callbacks.MessageThread = function(thread) {
             $scope.$apply(function() {
                 $scope.threads.push(thread);
