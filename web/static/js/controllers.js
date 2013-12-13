@@ -85,14 +85,16 @@ var app = angular.module('club').
     }]).
     controller('MessageController', ['$scope', '$rootScope', '$http', '$compile', 'callbacks', function($scope, $rootScope, $http, $compile, callbacks) {
         $scope.threads = eventer.init.messages;
+        $scope.displayScope = null;
 
+        /** Show a message in the display panel. */
         $scope.display = function (thread) {
 
             $http({method: 'GET', url: eventer.home + "/message/view/" + thread.id}).
                 success(function(data, status, headers, config) {
                     var scope = $rootScope.$new(true);
                     scope.thread = data;
-
+                    $scope.displayScope = scope;
                     scope.sendReply = function() {
                         var data = { thread_id: thread.id, reply: scope.thread.reply };
                         jQuery.postJSON(eventer.home+"/message/reply", data);
@@ -114,17 +116,20 @@ var app = angular.module('club').
                     content.width($("#thread-list").width()-22);
                 });
         };
-        callbacks.MessageThread = function(thread) {
+
+        /** Update of a new thread. */
+        callbacks.NewThread = function(thread) {
             $scope.$apply(function() {
-                $scope.threads.push(thread);
+                $scope.threads.unshift(thread);
             });
         };
-        callbacks.MessageReply = function(threadUpdate) {
+        /** Update: new reply. */
+        callbacks.ThreadReply = function(threadUpdate) {
             $scope.$apply(function() {
                 for (var index in $scope.threads) {
                     var thread = $scope.threads[index];
                     if (threadUpdate.threadId == thread.threadId) {
-                        thread.push(threadUpdate.comment);
+                        thread.newComments = (thread.newComments ||0)+ 1;
                         thread.updated = true;
                         break;
                     };

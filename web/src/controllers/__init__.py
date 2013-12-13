@@ -94,6 +94,7 @@ class MessageHandler(ActionHandler):
                               created=now, updated=now, last_response=now)
             self.db.add(comment)
             self.db.commit()
+            return json.dumps({"NewThread": comment.to_dict()})
         except Exception as e:
             print(e)
             pass
@@ -111,7 +112,7 @@ class MessageHandler(ActionHandler):
             original.last_response = now
             self.db.add(original)
             self.db.commit()
-
+            return json.dumps({"ThreadReply": original.id})
         except Exception as e:
             print(e)
             pass
