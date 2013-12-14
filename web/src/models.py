@@ -12,6 +12,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import (
     relationship,
     validates,
+    backref,
 )
 
 cp = configparser.ConfigParser()
@@ -43,9 +44,9 @@ class User(BaseMixin, Base):
     D = Column(Integer)
     L = Column(Integer)
     first_visit = Column(Boolean)
-    viewed_comments = relationship("CommentViews")
-    viewed_bodies = relationship("BodyViews")
-    comments = relationship("Comment", backref="user")
+    viewed_comments = relationship("CommentViews", cascade="all,delete")
+    viewed_bodies = relationship("BodyViews", cascade="all,delete")
+    comments = relationship("Comment", backref=backref("user", cascade="all,delete"))
 
     def presence(self):
         return [(d, getattr(self,d)) for d in "VSDL"]
@@ -66,14 +67,14 @@ class User(BaseMixin, Base):
 class Comment(BaseMixin, Base):
     __tablename__ = 'comments'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE", onupdate="CASCADE"))
     title = Column(String(140))
     comment = Column(Text)
     created = Column(DateTime, index=True)
     updated = Column(DateTime)
     last_response = Column(DateTime, index=True)
-    original = Column(Integer, ForeignKey('comments.id'), index=True)
-    replies = relationship("Comment", order_by="Comment.id")
+    original = Column(Integer, ForeignKey('comments.id', ondelete='CASCADE', onupdate='CASCADE'), index=True)
+    replies = relationship("Comment", order_by="Comment.id", cascade="all,delete")
 
     @validates("title")
     def validate_title(self, key, title):
@@ -94,20 +95,20 @@ class Comment(BaseMixin, Base):
 class Body(BaseMixin, Base):
     __tablename__ = 'bodies'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE", onupdate="CASCADE"))
     created = Column(DateTime)
     body = Column(Text)
 
 
 class BodyViews(BaseMixin, Base):
     __tablename__ = 'body_views'
-    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    body_id = Column(Integer, ForeignKey('bodies.id'), primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
+    body_id = Column(Integer, ForeignKey('bodies.id', ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
 
 class CommentViews(BaseMixin, Base):
     __tablename__ = 'comment_views'
-    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    comment_id = Column(Integer, ForeignKey('comments.id'), primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
+    comment_id = Column(Integer, ForeignKey('comments.id', ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
 
 def to_dict(model):
     return model.to_dict()
