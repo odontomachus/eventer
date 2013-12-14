@@ -7,7 +7,7 @@ var app = angular.module('club').
             $("#display-panel").html("");
         }
         $rootScope.$on("displayContent", function (event, content) {
-            var menu = $compile("<div display-menu></div>")($scope);
+            var menu = $compile('<div class="display-menu" display-menu></div>')($scope);
             content.prepend(menu);
             content.resizable({handles: "all"});
             content.draggable({distance: 5, containment: "document", handle: ".drag-handle"});
@@ -90,6 +90,10 @@ var app = angular.module('club').
         /** Show a message in the display panel. */
         $scope.display = function (thread) {
 
+            thread.updated = false;
+            thread.newClass = "";
+            thread.newComments = 0;
+
             $http({method: 'GET', url: eventer.home + "/message/view/" + thread.id}).
                 success(function(data, status, headers, config) {
                     var scope = $rootScope.$new(true);
@@ -130,6 +134,7 @@ var app = angular.module('club').
                     var thread = $scope.threads[index];
                     if (threadUpdate.threadId == thread.threadId) {
                         thread.newComments = (thread.newComments ||0)+ 1;
+                        thread.newClass = "new";
                         thread.updated = true;
                         break;
                     };

@@ -19,7 +19,7 @@ angular.module("club").
                 '<div class="do-reply">'+
                   '<a class="action" ng-click="thread.showReply=true">Répondre</a>' +
                   '<div ng-show="thread.showReply">' +
-                    '<textarea ng-model="thread.reply">{{thread.reply}}</textarea>' +
+                  '<div class="compose-wrapper"><textarea class="compose" ng-model="thread.reply">{{thread.reply}}</textarea></div>' +
                     '<button ng-click="sendReply()">Envoyer</button>' +
                   '</div>' +
                 '</div>' +
@@ -34,5 +34,4 @@ angular.module("club").
             template: '<div class="drag-handle ui-widget-header"><a class="btn-close" ng-click="remove()">&times;</a></div>',
         }
     });
-            
            

@@ -120,6 +120,7 @@ header {
     position:relative;
     float: left;
     width: 100%;
+    cursor: move;
 }
 
 .btn-close {
@@ -130,4 +131,92 @@ header {
     border-radius: 3px;
     padding: 1px 5px;
     float: right;
+}
+
+a {
+    cursor: pointer;
+    color: blue;
+}
+
+/**
+ * Display panel
+ */
+
+#display-panel div.content {
+    float: left;
+}
+
+#display-panel .ui-resizable {
+    height: auto;
+    float:left;
+}
+
+/**
+ * Message section.
+ */
+
+#thread-list span.title.new {
+    padding-left: 12px;
+/*    background:  */
+}
+
+div.compose {
+    width:100%;
+    min-height: 3em;
+    border: 1px solid grey;
+}
+
+div.thread-content button {
+    float:right;
+}
+
+div.display-menu {
+    float: left;
+    width: 100%;
+}
+
+div.compose-wrapper {
+    width: 100%;
+}
+div.compose-wrapper textarea {
+    width: 100%;
+}
+
+div.thread-content div.header {
+    float: left;
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+div.thread-content div.title {
+    float:left;
+    font-weight: bold;
+    padding: 3px 0px;
+}
+
+div.thread-content div.user {
+    float:right;
+    font-style: italic;
+}
+
+div.thread-content div.body {
+    position: relative;
+    padding: 3px;
+    width: 100%;
+    overflow: wrap;
+}
+
+div.thread-content .reply {
+    margin-top: 10px;
+    padding: 4px 0px 0px 5px;
+    border-top: 1px solid grey;
+}
+
+div.thread-content .reply .body {
+    margin: 0px 50px 0px 0px;
+
+}
+
+div.thread-content .do-reply {
+    padding-top: 15px;
 }

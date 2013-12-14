@@ -31,6 +31,7 @@
    <header>
      <div class="header wrap">
        <a href="/{{ user.hash }}"><h1>Plan Nord</h1></a>
+       <div class="who-am-i">{{ user.name }}</div>
      </div>
    </header>
 
@@ -73,6 +74,9 @@
                </tr>
              </tbody>
            </table>
+           <div class="invite-new">
+             
+           </div>
          </div>
        </div>
      </div>
@@ -85,7 +89,7 @@
          <div id="thread-list" class="thread-list">
            <div class="thread-listing" ng-repeat="thread in threads" id="thread-{{!thread.threadId}}">
              <div class="header expand-action" ng-click="display(thread)">
-               <span class="title" title="{{!thread.title}}">{{! thread.title|truncate:{length:100} }}</span>
+               <span class="title {{! thread.newClass }}" title="{{!thread.title}}">{{! thread.title|truncate:60 }}</span>
                <span class="user">{{!thread.user.name}}</span>
                <span class="num-replies">{{!thread.replies.length}}</span>
                <span class="date-created">{{!thread.created}}</span>

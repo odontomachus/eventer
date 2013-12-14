@@ -12,10 +12,10 @@ angular.module('club').
                 return "";
             }
             if (isNaN(length))
-                length = 10;
+                length = 40;
 
             if (end === undefined)
-                end = "...";
+                end = "&hellip;";
 
             if (text.length <= length) {
                 return text;

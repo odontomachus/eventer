@@ -1,6 +1,7 @@
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.exc import OperationalError, InvalidRequestError
 import tornado
+from tornado.web import HTTPError
 import models
 
 class DBHandler:
