@@ -121,6 +121,12 @@ var app = angular.module('club').
                 });
         };
 
+        $scope.newComments = function(thread) {
+            if (thread.newComments) {
+                return "<span class='new'>("+ thread.newComments+")</span>";
+            }
+        };
+
         /** Update of a new thread. */
         callbacks.NewThread = function(thread) {
             $scope.$apply(function() {
@@ -134,6 +140,7 @@ var app = angular.module('club').
                     var thread = $scope.threads[index];
                     if (threadUpdate.threadId == thread.threadId) {
                         thread.newComments = (thread.newComments ||0)+ 1;
+                        thread.reply_count += 1;
                         thread.newClass = "new";
                         thread.updated = true;
                         break;

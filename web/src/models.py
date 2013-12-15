@@ -9,6 +9,7 @@ from sqlalchemy import (
     Boolean,
     ForeignKey,
 )
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import (
     relationship,
     validates,
@@ -81,12 +82,24 @@ class Comment(BaseMixin, Base):
         assert len(title)<=140
         return title
 
+    @hybrid_property
+    def reply_count(self):
+        return len(self.replies)+1
+
+    @reply_count.expression
+    def reply_count(cls):
+        return (select([func.count('*')]).
+                where(Comment.id == cls.id).
+                label("reply_count")
+                )
+
     def to_dict(self, replies=False):
         base = BaseMixin.to_dict(self)
         for date in ('created', 'updated', 'last_response'):
             if base[date]:
                 base[date] = base[date].strftime('%c')
         base['user'] = {'name': self.user.name}
+        base['reply_count'] = self.reply_count
         if replies:
             base['replies'] = list(map(to_dict, self.replies))
         return base

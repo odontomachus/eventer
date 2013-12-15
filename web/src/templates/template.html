@@ -87,13 +87,24 @@
          <h3>Messages:</h3>
          <hr>
          <div id="thread-list" class="thread-list">
+           <div class="legend">
+             <div class="title">Sujet</div>
+             <div class="num-replies" title="Nombre de commentaires">#</div>
+             <div class="metadata creator">Auteur</div>
+             <div class="metadata latest-reply">Mise à jour</div>
+           </div>
            <div class="thread-listing" ng-repeat="thread in threads" id="thread-{{!thread.threadId}}">
              <div class="header expand-action" ng-click="display(thread)">
-               <span class="title {{! thread.newClass }}" title="{{!thread.title}}">{{! thread.title|truncate:60 }}</span>
-               <span class="user">{{!thread.user.name}}</span>
-               <span class="num-replies">{{!thread.replies.length}}</span>
-               <span class="date-created">{{!thread.created}}</span>
-               <span class="date-updated">{{!thread.last_response}}</span>
+               <div class="title {{! thread.newClass }}" title="{{!thread.title}}">{{! thread.title|truncate:60 }}</div>
+               <div class="num-replies" title="{{!thread.reply_count}}&nbsp; commentaires - {{!thread.newComments||0}} nouveaux">{{!thread.reply_count}}<span class="new" ng-show="thread.newComments">&nbsp;({{!thread.newComments}})</div>
+               <div class="metadata creator">
+                 <div class="user">{{!thread.user.name}}</div>
+                 <div class="date-created">{{!thread.created}}</div>
+
+               </div>
+               <div class="metadata latest-reply">
+                 <div class="date-updated">{{!thread.last_response}}</div>
+               </div>
              </div>
            </div>
          </div>
@@ -115,7 +126,7 @@
        <div class="chatMessages">
          <div class="chatWindow">
            <div ng-repeat="message in messages" class="message {{!message.userId}}">
-             <span title="Envoyé le {{!message.date}}" class="username">{{!message.nickname}}</span>&nbsp:&nbsp;<span class="text" ng-bind-html="message.text"></span>
+             <span title="Envoyé le {{!message.date}}" class="username">{{!message.nickname}}</span>&nbsp;:&nbsp;<span class="text" ng-bind-html="message.text"></span>
            </div>
          </div>
        </div>

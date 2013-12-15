@@ -197,9 +197,37 @@ a {
  * Message section.
  */
 
-#thread-list span.title.new {
-    padding-left: 12px;
-/*    background:  */
+#thread-list div.header {
+    cursor: pointer;
+}
+
+#thread-list div.legend > div {
+    float: left;
+    font-weight: bold;
+}
+
+#thread-list div.header > div {
+    float: left;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+#thread-list div.title {
+    width: 40%;
+    padding-right: 2%;
+}
+
+#thread-list div.user {
+    font-style: italic;
+}
+
+#thread-list div.num-replies {
+    width: 10%;
+}
+
+#thread-list div.metadata {
+    padding-left: 2%;
+    width: 22%;
 }
 
 div.compose {
@@ -265,5 +293,7 @@ div.thread-content .do-reply {
 
 div.new-thread {
     float: left;
-    margin-top: 10px;
+    margin-top: 20px;
 }
+
+
