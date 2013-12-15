@@ -2,8 +2,60 @@ header {
     width: 100%;
 }
 
-#main .section {
-    width: 50%;
+@media (min-width: 1281px) and (max-width: 1920px) {
+    body {
+        background: url("/img/background_1920.jpg") no-repeat fixed;
+    }
+}
+
+@media (min-width: 961px) and (max-width: 1280px) {
+    body {
+        background: url("/img/background_1280.jpg") no-repeat fixed;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 960px) {
+    body {
+        background: url("/img/background_960.jpg") no-repeat fixed;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        background: url("/img/background_768.jpg") no-repeat fixed;
+    }
+    #main .section {
+       width: 100%;
+    }
+}
+
+div.header h1 {
+    float: left;
+}
+
+div.header {
+    float: left;
+    width: 100%;
+}
+
+div.who-am-i {
+    float: right;
+    background-color: rgba(255,255,255,.2);
+    padding: 6px;
+    border-radius: 6px;
+}
+
+#main .section.wiki, #main .section.messages {
+    max-width: 960px;
+    min-width: 460px;
+}    
+
+#main .section.members {
+    max-width: 960px;
+    min-width: 320px;
+}    
+
+#main .section{
     position:relative;
     float: left;
     margin: 0;
@@ -12,16 +64,6 @@ header {
 
 #main .sectionArea {
     padding: 10px;
-}
-
-#main .wiki {
-}
-
-#main .participants {
-}
-
-#main .messages {
-    float: right;
 }
 
 #main .membersSchedule {
@@ -219,4 +261,9 @@ div.thread-content .reply .body {
 
 div.thread-content .do-reply {
     padding-top: 15px;
+}
+
+div.new-thread {
+    float: left;
+    margin-top: 10px;
 }

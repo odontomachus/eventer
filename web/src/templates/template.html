@@ -100,9 +100,9 @@
        </div>
        <div class="new-thread" ng-controller="NewMessageController">
          <label>sujet</label>
-         <input ngMaxlength="140" ng-model="comment.title" ng-required="true" /><br >
+         <input ngMaxlength="140" ng-model="comment.title" /><br >
          <label>Message</label>
-         <textarea ng-model="comment.comment" ng-required="true"></textarea>
+         <textarea ng-model="comment.comment"></textarea>
          <button ng-click="sendMessage()">Envoyer</button>
        </div>
      </div>
