@@ -136,61 +136,9 @@ div.who-am-i {
     padding-top: 0px;
 }
 
-.display-panel {
-    position: absolute;
-}
-
-.display-panel > div {
-    position: absolute;
-    background-color: rgba(255,255,255, .9);
-    z-index: 40;
-    border: 1px solid blue;
-    border-radius: 3px;
-}
-
-.display-panel > div > div.content {
-    padding: 10px;
-}
-
-.display-menu {
-    float:left;
-    width: 100%;
-    position:relative;
-}
-
-.drag-handle {
-    position:relative;
-    float: left;
-    width: 100%;
-    cursor: move;
-}
-
-.btn-close {
-    position:relative;
-    cursor: pointer;
-    background-color: #bbd;
-    border: 1px solid #446;
-    border-radius: 3px;
-    padding: 1px 5px;
-    float: right;
-}
-
 a {
     cursor: pointer;
     color: blue;
-}
-
-/**
- * Display panel
- */
-
-#display-panel div.content {
-    float: left;
-}
-
-#display-panel .ui-resizable {
-    height: auto;
-    float:left;
 }
 
 /**
@@ -243,6 +191,7 @@ div.thread-content button {
 div.display-menu {
     float: left;
     width: 100%;
+    position:relative;
 }
 
 div.compose-wrapper {
@@ -250,6 +199,61 @@ div.compose-wrapper {
 }
 div.compose-wrapper textarea {
     width: 100%;
+}
+
+/**
+ * Display panel
+ */
+
+#display-panel {
+    position: absolute;
+}
+
+#display-panel > div {
+    background-color: rgba(255,255,255, .9);
+    z-index: 40;
+    border: 1px solid blue;
+    border-radius: 3px;
+    min-width: 160px;
+    min-height: 160px;
+}
+
+#display-panel > div > div.content {
+    width: 100%;
+    height: 100%;
+}
+
+.display-panel > div div.thread-content {
+    position: absolute;
+    overflow: auto;
+    top: 0px;
+    left: 0px;
+    margin: 25px 0px 0px 0px;
+    padding: 0px 6px 0px 8px;
+    bottom: 0px;
+    right: 0px;
+}
+
+.drag-handle {
+    position:relative;
+    float: left;
+    width: 100%;
+    cursor: move;
+}
+
+.btn-close {
+    position:relative;
+    cursor: pointer;
+    background-color: #bbd;
+    border: 1px solid #446;
+    border-radius: 3px;
+    padding: 1px 5px;
+    float: right;
+}
+
+#display-panel .ui-resizable {
+    height: auto;
+    float:left;
 }
 
 div.thread-content div.header {

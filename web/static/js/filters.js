@@ -15,7 +15,7 @@ angular.module('club').
                 length = 40;
 
             if (end === undefined)
-                end = "&hellip;";
+                end = "...";
 
             if (text.length <= length) {
                 return text;
