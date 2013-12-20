@@ -10,11 +10,11 @@ angular.module("club").
                     '<div class="title">{{thread.title}}</div>' +
                     '<div class="user">{{thread.user.name}}</div>' +
                   '</div>' +
-                  '<div class="body">{{thread.comment}}</div>' +
+                  '<div class="body">{{thread.comment | escapeHTML | newlines | linky }}</div>' +
                 '</div>' +
                 '<div class="reply" ng-repeat="reply in thread.replies">' +
                   '<div class="user">{{reply.user.name}}</div>' +
-                  '<div class="body">{{reply.comment}}</div>' +
+                  '<div class="body" ng-bind-html="reply.comment | escapeHTML| newlines| linky"></div>' +
                 '</div>' +
                 '<div class="do-reply">'+
                   '<a class="action" ng-click="thread.showReply=true">Répondre</a>' +

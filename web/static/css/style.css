@@ -300,4 +300,10 @@ div.new-thread {
     margin-top: 20px;
 }
 
+div.clear {
+    clear:both;
+}
 
+div.bottom {
+    padding: 40px 0px;
+}
